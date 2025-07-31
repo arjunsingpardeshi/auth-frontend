@@ -5,15 +5,18 @@ import { Loader } from 'lucide-react'
 import HomePage from './page/HomePage'
 import LoginPage from './page/LoginPage'
 import SignUpPage from './page/SignUpPage'
+import Layout from './layout/Layout'
 import { useAuthStore } from './store/useAuthStore'
 const App = () => {
 
   const {authUser, checkAuth, isCheckingAuth} = useAuthStore();
 
+  
   useEffect(() => {
-    checkAuth
+    checkAuth()
   }, [checkAuth])
 
+  console.log("authuser after checkAuth", authUser)
   if(!authUser && isCheckingAuth){
     return (
       <div className='flex items-center justify-center h-screen'>
@@ -25,11 +28,14 @@ const App = () => {
     <div>
       <Toaster/>
       <Routes>
+      
 
-        <Route
-        path='/'
-        element={authUser ? <HomePage/> : <Navigate to={"/login"}/>}
-        />
+      <Route path="/" element={<Layout/>}>
+            <Route
+            index
+            element={authUser ? <HomePage/> : <Navigate to={"/login"}/>}
+            />
+      </Route>
 
       <Route
       path='/login'

@@ -11,11 +11,11 @@ export const useAuthStore = create((set) => ({
     isCheckingAuth: false,
 
     checkAuth: async () => {
-        set({isCheckingAuth: true});
+        set({isCheckingAuth: true});        
         try {
             const res = await axiosInstance.get("/current-user")
             console.log("current-user data", res.data);
-            set({authUser:res.data.user})
+            set({authUser: res.data})
         } catch (error) {
          console.log(" Error in geting current-user data", error);
          set({authUser:null})
@@ -32,9 +32,10 @@ export const useAuthStore = create((set) => ({
         try {
             const res = await axiosInstance.post("/register", data)
             console.log("signup data ", res.data)
-            set({authUser: res.data.user})
+           // set({authUser: res.data})
             toast.success(res.data.message)
         } catch (error) {
+            set({authUser: null})
             console.log("error in sign up", error)
             toast.error("error in sign up")
         }
@@ -50,9 +51,10 @@ export const useAuthStore = create((set) => ({
         try {
             const res = await axiosInstance.post("/login", data)
             console.log("user login ", res.data);
-            set({authUser: res.data.user})
+            set({authUser: res.data})
             toast.success(res.data.message)
         } catch (error) {
+            set({authUser: null})
             console.log("error in login ", error)
             toast.error("error in login")
         }
@@ -63,7 +65,7 @@ export const useAuthStore = create((set) => ({
 
     logout: async () => {
         try {
-            const res = await axiosInstance.post("/login")
+            const res = await axiosInstance.post("/logout")
             set({authUser: null})
             toast.success(res.data.message)
         } catch (error) {
